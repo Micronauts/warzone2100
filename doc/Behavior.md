@@ -22,6 +22,9 @@ then you should submit a bug report or update this file.
    > This prevents misreports from the debugging interface being stuck/stale. Do not skip this step!
 ---
 # Secondary States by Unit
+<img width="256" height="128" alt="image" src="https://github.com/user-attachments/assets/5f0cc0ad-4fcc-489c-96fd-c6831199b216" />
+
+>https://github.com/Warzone2100/warzone2100/blob/a5975f8e12784876e4cfbf0e8a8f969b0273371a/src/order.cpp#L3187
 
 A typical combat unit's secondary state is described by a four letter string using the first letter in each parameter's value:
 
