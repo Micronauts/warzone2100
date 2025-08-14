@@ -67,24 +67,24 @@
 
 #include "random.h"
 
-/** How long a droid runs after it fails do respond due to low moral. */
+/** How long a droid runs after it fails to respond due to low moral. (for campaign AI, see tactics.js) */
 #define RUN_TIME		8000
 
-/** How long a droid runs burning after it fails do respond due to low moral. */
+/** How long a droid runs burning after it fails do respond due to low moral. (for campaign AI, see tactics.js) */
 #define RUN_BURN_TIME	10000
 
-/** The distance a droid has in guard mode. */
+/** The max distance a droid will displace from a point in guard mode. */
 #define DEFEND_MAXDIST		(TILE_UNITS * 3)
 
-/** The distance a droid has in guard mode.
+/** The preferred distance a droid will displace from a point in guard mode.
  * @todo seems to be used as equivalent to GUARD_MAXDIST.
  */
 #define DEFEND_BASEDIST		(TILE_UNITS * 3)
 
-/** The distance a droid has in guard mode. Equivalent to GUARD_MAXDIST, but used for droids being on a command group. */
+/** The max distance a droid will displace while attached to a commander. */
 #define DEFEND_CMD_MAXDIST		(TILE_UNITS * 8)
 
-/** The distance a droid has in guard mode. Equivalent to GUARD_BASEDIST, but used for droids being on a command group. */
+/** The preferred distance a droid will displace while attached to a commander. */
 #define DEFEND_CMD_BASEDIST		(TILE_UNITS * 5)
 
 /** The maximum distance a constructor droid has in guard mode. */
@@ -103,7 +103,7 @@ static void orderClearDroidList(DROID *psDroid);
  */
 static bool bOrderEffectDisplayed = false;
 
-/** What the droid's action/order it is currently. This is used to debug purposes, jointly with showSAMPLES(). */
+/** What the droid's action/order is currently. This is used to debug purposes, jointly with showSAMPLES(). */
 extern char DROIDDOING[512];
 //////////////////////////////////////////////////////////////////
 
