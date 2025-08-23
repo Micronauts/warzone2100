@@ -1,5 +1,26 @@
 # Building Warzone 2100 for Windows
 
+### Prerequisites (MSVC):
+
+1. **Visual Studio 2022** (Visual Studio 2019 may work, but 2022+ is strongly encouraged)
+    - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
+    - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
+2. **CMake 3.28+**
+    - If you do not have CMake 3.24+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
+3. **Git** (if not building from a release source archive)
+4. **7-Zip** (https://www.7-zip.org)
+5. **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
+  - Required only if you want to build with Vulkan support.
+
+### Using MSVC
+
+1. Launch Visual Studio and continue without code
+<div align="center">
+  <img width="120" height="360" alt="image" src="https://github.com/user-attachments/assets/afddab23-dd89-495b-b2ad-1c0efefb2ac6" />
+  <img width="210" height="360" alt="image" src="https://github.com/user-attachments/assets/4aeb5f49-f85b-4cfd-81f7-ba6506ddcb44" />
+
+</div>
+
 ### Getting the Source
 
 - Clone the Git repo:
@@ -32,23 +53,6 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       ```shell
       cmake --build . --target install
       ```
-
-
-## Building with MSVC:
-
-### Prerequisites:
-
-1. **Visual Studio 2022** (Visual Studio 2019 may work, but 2022+ is strongly encouraged)
-    - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
-    - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
-2. **CMake 3.28+**
-    - If you do not have CMake 3.24+, you can [download the latest stable version for free at CMake.org](https://cmake.org/download/#latest).
-3. **Git** (if not building from a release source archive)
-4. **7-Zip** (https://www.7-zip.org)
-5. **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
-  - Required only if you want to build with Vulkan support.
-
-
 
 ### Preparing to build:
 
