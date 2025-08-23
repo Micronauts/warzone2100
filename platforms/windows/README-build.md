@@ -1,5 +1,39 @@
 # Building Warzone 2100 for Windows
 
+### Getting the Source
+
+- Clone the Git repo:
+  ```shell
+  git clone https://github.com/Warzone2100/warzone2100.git
+  cd warzone2100
+  git fetch --tags
+  git submodule update --init --recursive
+  ```
+  > Note: Initializing submodules is required.
+
+Do **not** use GitHub's "Download Zip" option, as it **does not contain submodules** or the Git-based autorevision information.
+
+* **Building from the command-line:**
+   1. Starting from the _parent_ directory of the warzone2100 repository, create an [out-of-source](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html#directory-structure) build directory:
+      ```shell
+      mkdir build
+      ```
+   2. Change directory into the `build` directory:
+      ```shell
+      cd build
+      ```
+   3. Run CMake configure to generate the build files:
+      ```shell
+      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
+      ```
+      > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
+      > - The `../warzone2100` path at the end should point to the warzone2100 repo directory. This example assumes that the repo directory and the build directory are siblings, and that the repo was cloned into a directory named `warzone2100`.
+   4. Run CMake build:
+      ```shell
+      cmake --build . --target install
+      ```
+
+
 ## Building with MSVC:
 
 ### Prerequisites:
@@ -14,10 +48,14 @@
 5. **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
   - Required only if you want to build with Vulkan support.
 
+
+
 ### Preparing to build:
 
 Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
-* Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
+* Run the `get-dependencies_win.ps1` script from powershell inside of the repo root directory in order to download and build the dependencies.
+
+> Enter `.\get-dependencies_win.ps1` in the powershell developer console to run it. If you lack permissions and entering `Get-ExecutionPolicy` returns `Restricted`, use `Set-ExecutionPolicy RemoteSigned`.
 
 ### Building from the command-line:
 1. Change directory to the warzone2100 repo directory
