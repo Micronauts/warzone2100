@@ -3281,17 +3281,16 @@ static char *secondaryPrintFactories(UDWORD state)
 
 
 /** This function returns true if the droid needs repair according to the repair state, and in case there are some other droids selected, deselect those that are going to repair.
- * @todo there is some problem related with the values of REPAIRLEV_HIGH and REPAIRLEV_LOW that needs to be fixed.
  */
 static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE repairState)
 {
-	unsigned repairLevel;
+	unsigned repairLevel;  // declare var: retreat when %hp drops to this value
 	switch (repairState)
 	{
-	case DSS_REPLEV_LOW:   repairLevel = REPAIRLEV_HIGH; break;  // LOW → HIGH, seems DSS_REPLEV_LOW and DSS_REPLEV_HIGH are badly named?
-	case DSS_REPLEV_HIGH:  repairLevel = REPAIRLEV_LOW;  break;
-	default:
-	case DSS_REPLEV_NEVER: repairLevel = 0;              break;
+	case DSS_REPLEV_LOW:   repairLevel = REPAIRLEV_HIGH; break;  // LOW → HIGH, seems DSS_REPLEV_LOW and DSS_REPLEV_HIGH are badly named? [response below]
+	case DSS_REPLEV_HIGH:  repairLevel = REPAIRLEV_LOW;  break;  // DSS_REPLEV_HIGH refers to level of damage received (medium/high/die) while the repairLevel is what %hp retreat should commence.
+	default:													 // Confusing grammar issues corrected in orderdef.h Pumpkin Source distinguished droid and cyborg hp as damage and health respectively (probably dealing with the smoke gfx). There should be a renaming of 'damage' to health,hp,or bodypts to avoid confusion.
+	case DSS_REPLEV_NEVER: repairLevel = 0;              break;  // Do or Die is the default 2ndState, repairLevel is set to 0 (hp; death) so it never retreats.
 	}
 
 	// psDroid->body / psDroid->originalBody < repairLevel / 100, without integer truncation
@@ -3315,7 +3314,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 }
 
 
-/** This function checks the droid damage level against its secondary state. If the damage level is too high, then it sends an order to the droid to return to repair.*/
+/** This function checks the droid damage level against its secondary state. If the damage level is too high, then it sends an order to the droid to return to repair. [should this come before secondaryCheckDamageDeselect?]*/
 void secondaryCheckDamageLevel(DROID *psDroid)
 {
 	if (secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL)))

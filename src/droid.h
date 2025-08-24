@@ -37,10 +37,10 @@
 
 #define OFF_SCREEN 9999		// world->screen check - alex
 
-#define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
-#define REPAIRLEV_HIGH	75	// ditto, but this will repair much sooner..
+#define REPAIRLEV_LOW	49	// Retreat at Heavy Damage : % body points remaining (x-1 for int-division) at which droid seeks repairs.
+#define REPAIRLEV_HIGH	74	// Retreat at Medium Damage : % body points remaining (x-1 for int-division) at which droid seeks repairs.
 
-#define DROID_RESISTANCE_FACTOR     30
+#define DROID_RESISTANCE_FACTOR     30 // resistance to eletronic warfare - appears to be unreferenced
 
 // Changing this breaks campaign saves!
 #define MAX_RECYCLED_DROIDS 450

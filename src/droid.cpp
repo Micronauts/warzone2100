@@ -950,7 +950,7 @@ void droidUpdate(DROID *psDroid)
 		percentDamage = 100 - clip<UDWORD>(PERCENT(psDroid->body, psDroid->originalBody), 0, 100);
 
 		// Is there any damage?
-		if (percentDamage >= 25)
+		if (percentDamage > 25)
 		{
 			if (percentDamage >= 100)
 			{

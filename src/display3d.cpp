@@ -3487,7 +3487,7 @@ bool	eitherSelected(DROID *psDroid)
 
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
-	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+	UDWORD hpPercent  = PERCENT(psDroid->body, psDroid->originalBody);
 	UDWORD shields = 0;
 
 	if (psDroid->shieldPoints >= 0)
@@ -3504,12 +3504,12 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	PIELIGHT powerCol = WZCOL_BLACK;
 	PIELIGHT powerColShadow = WZCOL_BLACK;
 
-	if (damage > REPAIRLEV_HIGH)
+	if ( hpPercent  > REPAIRLEV_HIGH)
 	{
 		powerCol = WZCOL_HEALTH_HIGH;
 		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
 	}
-	else if (damage > REPAIRLEV_LOW)
+	else if ( hpPercent  > REPAIRLEV_LOW)
 	{
 		powerCol = WZCOL_HEALTH_MEDIUM;
 		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
@@ -3520,13 +3520,14 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 	}
 
-	damage = static_cast<UDWORD>((float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR);
-	if (damage > psDroid->sDisplay.screenR)
+	 hpPercent  = static_cast<UDWORD>((float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR);
+	if ( hpPercent  > psDroid->sDisplay.screenR)
 	{
-		damage = psDroid->sDisplay.screenR;
+		 hpPercent  = psDroid->sDisplay.screenR;
 	}
 
-	damage *= 2;
+	hpPercent  = MAX( hpPercent , 1); //any unit alive should show at least 1 tick
+	hpPercent *= 2;		
 
 	if (drawBox)
 	{
@@ -3538,8 +3539,8 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 
 	/* Power bars */
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
-	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR +  hpPercent , psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR +  hpPercent , psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
 		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
 		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
@@ -3559,7 +3560,7 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 	PIELIGHT powerCol = WZCOL_BLACK;
 	PIELIGHT powerColShadow = WZCOL_BLACK;
 	PIELIGHT boxCol;
-	UDWORD damage;
+	UDWORD  hpPercent ;
 	float mulH;
 
 	//show resistance values if CTRL/SHIFT depressed
@@ -3567,24 +3568,24 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 	{
 		if (psDroid->resistance)
 		{
-			damage = PERCENT(psDroid->resistance, psDroid->droidResistance());
+			 hpPercent  = PERCENT(psDroid->resistance, psDroid->droidResistance());
 		}
 		else
 		{
-			damage = 100;
+			 hpPercent  = 100;
 		}
 	}
 	else
 	{
-		damage = PERCENT(psDroid->body, psDroid->originalBody);
+		 hpPercent  = PERCENT(psDroid->body, psDroid->originalBody);
 	}
 
-	if (damage > REPAIRLEV_HIGH)
+	if ( hpPercent  > REPAIRLEV_HIGH)
 	{
 		powerCol = WZCOL_HEALTH_HIGH;
 		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
 	}
-	else if (damage > REPAIRLEV_LOW)
+	else if ( hpPercent  > REPAIRLEV_LOW)
 	{
 		powerCol = WZCOL_HEALTH_MEDIUM;
 		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
@@ -3611,12 +3612,12 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 	{
 		mulH = (float)psDroid->body / (float)psDroid->originalBody;
 	}
-	damage = static_cast<UDWORD>(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-	if (damage > psDroid->sDisplay.screenR)
+	 hpPercent  = static_cast<UDWORD>(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)* hpPercent )/10000;
+	if ( hpPercent  > psDroid->sDisplay.screenR)
 	{
-		damage = psDroid->sDisplay.screenR;
+		 hpPercent  = psDroid->sDisplay.screenR;
 	}
-	damage *= 2;
+	 hpPercent  *= 2;
 	auto scrX = psDroid->sDisplay.screenX;
 	auto scrY = psDroid->sDisplay.screenY;
 	auto scrR = psDroid->sDisplay.screenR;
@@ -3631,8 +3632,8 @@ static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRende
 
 		/* Power bars */
 		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
-		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, powerCol), rectGroup);
-		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow), rectGroup);
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR +  hpPercent , scrY + scrR + 4, powerCol), rectGroup);
+		batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR +  hpPercent , scrY + scrR + 5, powerColShadow), rectGroup);
 	}
 }
 
