@@ -1,8 +1,6 @@
 # Building Warzone 2100 for Windows
 
-## Building with MSVC:
-
-### Prerequisites:
+### Prerequisites (MSVC):
 
 1. **Visual Studio 2022** (Visual Studio 2019 may work, but 2022+ is strongly encouraged)
     - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
@@ -14,10 +12,54 @@
 5. **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
   - Required only if you want to build with Vulkan support.
 
+### Using MSVC
+
+1. Launch Visual Studio and continue without code
+<div align="center">
+  <img width="120" height="360" alt="image" src="https://github.com/user-attachments/assets/afddab23-dd89-495b-b2ad-1c0efefb2ac6" />
+  <img width="210" height="360" alt="image" src="https://github.com/user-attachments/assets/4aeb5f49-f85b-4cfd-81f7-ba6506ddcb44" />
+
+</div>
+
+### Getting the Source
+
+- Clone the Git repo:
+  ```shell
+  git clone https://github.com/Warzone2100/warzone2100.git
+  cd warzone2100
+  git fetch --tags
+  git submodule update --init --recursive
+  ```
+  > Note: Initializing submodules is required.
+
+Do **not** use GitHub's "Download Zip" option, as it **does not contain submodules** or the Git-based autorevision information.
+
+* **Building from the command-line:**
+   1. Starting from the _parent_ directory of the warzone2100 repository, create an [out-of-source](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html#directory-structure) build directory:
+      ```shell
+      mkdir build
+      ```
+   2. Change directory into the `build` directory:
+      ```shell
+      cd build
+      ```
+   3. Run CMake configure to generate the build files:
+      ```shell
+      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
+      ```
+      > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
+      > - The `../warzone2100` path at the end should point to the warzone2100 repo directory. This example assumes that the repo directory and the build directory are siblings, and that the repo was cloned into a directory named `warzone2100`.
+   4. Run CMake build:
+      ```shell
+      cmake --build . --target install
+      ```
+
 ### Preparing to build:
 
 Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
-* Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
+* Run the `get-dependencies_win.ps1` script from powershell inside of the repo root directory in order to download and build the dependencies.
+
+> Enter `.\get-dependencies_win.ps1` in the powershell developer console to run it. If you lack permissions and entering `Get-ExecutionPolicy` returns `Restricted`, use `Set-ExecutionPolicy RemoteSigned`.
 
 ### Building from the command-line:
 1. Change directory to the warzone2100 repo directory
